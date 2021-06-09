@@ -1,0 +1,35 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: true
+    when: ansible_distribution == "Raspbian"
+
+- hosts: rpi
+  become: true
+  tasks:
+
+  - name: install apache2 and php
+    tags: apache, php, ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Raspbian"
+
+- hosts: rpi
+  become: true
+  tasks:
+
+  - name: install mariadb
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "raspbian"
